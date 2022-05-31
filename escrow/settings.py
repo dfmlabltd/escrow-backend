@@ -48,6 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+INSTALLED_APPS += [
+    'rest_framework',
+    'user',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -133,4 +138,18 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-OTP_EXPIRY = env("OTP_EXPIRY") # in seconds = 5 minutes = 300
+OTP_EXPIRY_TIME = int(env("OTP_EXPIRY_TIME")) # in seconds = 5 minutes = 300
+
+AUTH_USER_MODEL  = 'user.PasswordlessUserModel'
+
+
+AUTHENTICATION_BACKENDS = [
+    'user.backends.PasswordlessBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
