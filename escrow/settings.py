@@ -155,15 +155,12 @@ REST_FRAMEWORK = {
     )
 }
 
-from datetime import timedelta
-
 POST_OFFICE = {
     'BATCH_SIZE': 50,
     'CELERY_ENABLED': True,
-    'DEFAULT_PRIORITY': 'now',
+    'DEFAULT_PRIORITY': 'high', #if priority is set to 'now' celery will not work
     'MESSAGE_ID_ENABLED': True,
     'MAX_RETRIES': 10,
-    'RETRY_INTERVAL': timedelta(minutes=15),
     'LOG_LEVEL': 2,
 }
 
