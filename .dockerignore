@@ -131,3 +131,6 @@ dmypy.json
 # nginx stuffs
 *.crt
 *.key
+
+# docker stuffs
+Dockerfile
