@@ -15,7 +15,7 @@ class PasswordlessUserModel(AbstractUser):
     
     last_name = None
     
-    username = UsernameField(max_length=16, validators=(validate_username,), unique=True)
+    username = UsernameField(max_length=16, validators=(validate_username,), unique=True, null=True, blank=True)
     
     email = models.EmailField(unique=True, max_length=128)
     
@@ -66,9 +66,18 @@ class OTPModel(models.Model):
 
     @classmethod
     def create_otp(cls: OTPModel, user: settings.AUTH_USER_MODEL) -> OTPModel:
+        
+        cls.invalidate_user_otps(user)
 
-        otp = OTPModel(user=user)
+        otp = cls(user=user)
 
         otp.save()
 
         return otp
+
+    @classmethod
+    def invalidate_user_otps(cls: OTPModel, user: settings.AUTH_USER_MODEL) -> settings.AUTH_USER_MODEL:
+        
+        otps = cls.objects.filter(user=user, status=True)
+        
+        otps.update(status=False)
