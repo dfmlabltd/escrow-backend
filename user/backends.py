@@ -10,8 +10,8 @@ UserModel = get_user_model()
 class PasswordlessBackend(ModelBackend):
 
     def authenticate(self, request, **kwargs) -> UserModel:
-                                        
-        email = kwargs.get('email')
+
+        email = kwargs.get(settings.USERNAME_FIELD)
 
         code = kwargs.get('password')
 
@@ -45,7 +45,7 @@ class PasswordlessBackend(ModelBackend):
         except OTPModel.DoesNotExist:
 
             return
-        
+
     def get_user(self, user_id):
         try:
             return User.objects.get(pk=user_id)
