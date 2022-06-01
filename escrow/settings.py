@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'rest_framework',
     'user',
+    'post_office'
 ]
 
 MIDDLEWARE = [
@@ -152,4 +153,62 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+from datetime import timedelta
+
+POST_OFFICE = {
+    'BATCH_SIZE': 50,
+    'CELERY_ENABLED': True,
+    'DEFAULT_PRIORITY': 'now',
+    'MESSAGE_ID_ENABLED': True,
+    'MAX_RETRIES': 10,
+    'RETRY_INTERVAL': timedelta(minutes=15),
+    'LOG_LEVEL': 2,
+}
+
+
+
+if DEBUG:
+    
+    POST_OFFICE['OVERRIDE_RECIPIENTS'] = [
+        env("EMAIL_RECIPIENT"),
+    ]
+    
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+
+EMAIL_BACKEND = env("EMAIL_BACKEND")
+
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+
+EMAIL_HOST = env("EMAIL_HOST")
+
+EMAIL_PORT = env("EMAIL_PORT")
+
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+
+EMAIL_SENDER = env("EMAIL_SENDER")
+
+BROKER_URL = env("BROKER_URL")
+
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND")
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_TIMEZONE = env("CELERY_TIMEZONE")
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': env('REDIS_URL'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
 }
