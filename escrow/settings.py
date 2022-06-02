@@ -209,3 +209,11 @@ CACHES = {
         }
     }
 }
+
+STATIC_URL = '/static/'
+
+# STATICFILES_DIRS = (
+    
+# )
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'

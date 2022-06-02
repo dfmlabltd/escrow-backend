@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  backend:
+    build: .
+    container_name: django_backend
+    restart: on-failure:5
+    env_file:
+      - ./escrow/.env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./staticfiles:/opt/django/staticfiles
+    command:
+      "gunicorn --workers=2 --bind=0.0.0.0:8000 escrow.wsgi:application"
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "9000:80"
+      - "9001:443"
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - ./config/nginx/logs:/etc/nginx/logs
+      - ./config/nginx/others:/etc/nginx/others
+      - ./config/nginx/security:/etc/nginx/security
+      - ./staticfiles:/opt/django/staticfiles
+    depends_on:
+      - backend
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_volume:/data
+
+volumes:
+  redis_volume:
