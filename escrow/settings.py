@@ -90,8 +90,12 @@ WSGI_APPLICATION = 'escrow.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env("DATABASE_ENGINE"),
+        'NAME': env("POSTGRES_DB"), 
+        'USER': env("POSTGRES_USER"), 
+        'PASSWORD': env("POSTGRES_PASSWORD"),
+        'HOST': env("DATABASE_HOST"), 
+        'PORT': env("DATABASE_PORT"),
     }
 }
 
@@ -164,13 +168,6 @@ POST_OFFICE = {
     'LOG_LEVEL': 2,
 }
 
-
-
-if DEBUG:
-    
-    POST_OFFICE['OVERRIDE_RECIPIENTS'] = [
-        env("EMAIL_RECIPIENT"),
-    ]
     
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 

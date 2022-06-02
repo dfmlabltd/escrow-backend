@@ -13,6 +13,9 @@ services:
       - ./staticfiles:/opt/django/staticfiles
     command:
       "gunicorn --workers=2 --bind=0.0.0.0:8000 escrow.wsgi:application"
+    depends_on:
+      - database
+      - redis
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -35,6 +38,17 @@ services:
       - 6379:6379
     volumes:
       - redis_volume:/data
-
+  migrations:
+    build: .
+    command: python manage.py migrate
+    depends_on:
+      - database
+  database:
+    image: "postgres" # use latest official postgres version
+    env_file:
+      - ./escrow/.env
+    volumes:
+      - database_data:/var/lib/postgresql/data/
 volumes:
   redis_volume:
+  database_data:
