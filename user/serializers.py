@@ -12,6 +12,14 @@ class UserSerializer(serializers.ModelSerializer):
 
         fields = ('email', )
 
+class UsernameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = UserModel
+
+        fields = ('username', )
+
 
 class OTPSerializer(serializers.ModelSerializer):
 

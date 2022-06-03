@@ -10,6 +10,10 @@ from user.validators import validate_username
 # Create your models here.
 
 class PasswordlessUserModel(AbstractUser):
+    
+    """
+    Model for passwordless authentication
+    """
         
     first_name = None
     
@@ -41,6 +45,10 @@ def compute_otp() -> str:
 
 
 class OTPModel(models.Model):
+    
+    """
+    Model for the otp used in passwordless authentication
+    """
 
     code = models.CharField(max_length=128, default=compute_otp())
 
