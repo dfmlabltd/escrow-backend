@@ -15,13 +15,13 @@ class PasswordlessUserModel(AbstractUser):
     
     last_name = None
     
-    username = UsernameField(max_length=16, validators=(validate_username,), unique=True, null=True, blank=True)
+    username = UsernameField(max_length=16, validators=(validate_username,), null=True, blank=True)
     
     email = models.EmailField(unique=True, max_length=128)
+        
+    USERNAME_FIELD = settings.USERNAME_FIELD
     
     REQUIRED_FIELDS = ['username']
-    
-    USERNAME_FIELD = 'email'
     
 
 def compute_expiry_time() -> timezone:

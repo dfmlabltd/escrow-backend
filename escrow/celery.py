@@ -3,9 +3,9 @@ import os
 from celery import Celery
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'account.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'escrow.settings')
 
-app = Celery('account')
+app = Celery('escrow')
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
@@ -19,6 +19,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'send-queued-mail': {
         'task': 'post_office.tasks.send_queued_mail',
-        'schedule': 9.0,
+        'schedule': 5.0,
     },
 }

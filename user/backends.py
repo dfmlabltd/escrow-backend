@@ -11,9 +11,9 @@ class PasswordlessBackend(ModelBackend):
 
     def authenticate(self, request, **kwargs) -> UserModel:
 
-        email = kwargs.get(settings.USERNAME_FIELD)
+        email: str = kwargs.get(settings.USERNAME_FIELD)
 
-        code = kwargs.get('password')
+        code: str = kwargs.get('password')
 
         if email is None or code is None:
 

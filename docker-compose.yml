@@ -1,35 +1,54 @@
 version: "3.7"
 
 services:
-  backend:
+  django:
     build: .
-    container_name: django_backend
+    container_name: django
     restart: on-failure:5
     env_file:
       - ./escrow/.env
     ports:
       - "8000:8000"
     volumes:
-      - ./staticfiles:/opt/django/staticfiles
-    command:
-      "gunicorn --workers=2 --bind=0.0.0.0:8000 escrow.wsgi:application"
+      - ./:/usr/src/app
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --workers=2 --bind=0.0.0.0:8000 escrow.wsgi:application"
     depends_on:
       - database
       - redis
+  celery:
+    container_name: celery
+    restart: on-failure:5
+    env_file:
+      - ./escrow/.env
+    build: ./
+    command: celery -A escrow worker -l  info
+    volumes:
+      - ./:/usr/src/app/
+  celery_heartbeat:
+    container_name: celery_heartbeat
+    restart: on-failure:5
+    env_file:
+      - ./escrow/.env
+    build: ./
+    command: celery -A escrow beat -l  info
+    depends_on:
+      - celery
+    volumes:
+      - ./:/usr/src/app/
   nginx:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "9000:80"
-      - "9001:443"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - ./config/nginx/logs:/etc/nginx/logs
       - ./config/nginx/others:/etc/nginx/others
       - ./config/nginx/security:/etc/nginx/security
-      - ./staticfiles:/opt/django/staticfiles
+      - ./staticfiles:/staticfiles
     depends_on:
-      - backend
+      - django
   redis:
     container_name: redis
     hostname: redis
@@ -38,11 +57,6 @@ services:
       - 6379:6379
     volumes:
       - redis_volume:/data
-  migrations:
-    build: .
-    command: python manage.py migrate
-    depends_on:
-      - database
   database:
     image: "postgres" # use latest official postgres version
     env_file:

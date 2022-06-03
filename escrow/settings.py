@@ -34,7 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -91,10 +91,10 @@ WSGI_APPLICATION = 'escrow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': env("DATABASE_ENGINE"),
-        'NAME': env("POSTGRES_DB"), 
-        'USER': env("POSTGRES_USER"), 
+        'NAME': env("POSTGRES_DB"),
+        'USER': env("POSTGRES_USER"),
         'PASSWORD': env("POSTGRES_PASSWORD"),
-        'HOST': env("DATABASE_HOST"), 
+        'HOST': env("DATABASE_HOST"),
         'PORT': env("DATABASE_PORT"),
     }
 }
@@ -143,9 +143,9 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-OTP_EXPIRY_TIME = int(env("OTP_EXPIRY_TIME")) # in seconds = 5 minutes = 300
+OTP_EXPIRY_TIME = int(env("OTP_EXPIRY_TIME"))  # in seconds = 5 minutes = 300
 
-AUTH_USER_MODEL  = 'user.PasswordlessUserModel'
+AUTH_USER_MODEL = 'user.PasswordlessUserModel'
 
 
 AUTHENTICATION_BACKENDS = [
@@ -156,19 +156,26 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
 }
 
 POST_OFFICE = {
     'BATCH_SIZE': 50,
     'CELERY_ENABLED': True,
-    'DEFAULT_PRIORITY': 'high', #if priority is set to 'now' celery will not work
+    'DEFAULT_PRIORITY': 'high',  # if priority is set to 'now' celery will not work
     'MESSAGE_ID_ENABLED': True,
     'MAX_RETRIES': 10,
     'LOG_LEVEL': 2,
 }
 
-    
+USERNAME_FIELD = 'email'
+
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 
 EMAIL_BACKEND = env("EMAIL_BACKEND")
@@ -178,8 +185,6 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST = env("EMAIL_HOST")
 
 EMAIL_PORT = env("EMAIL_PORT")
-
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
@@ -210,7 +215,7 @@ CACHES = {
 STATIC_URL = '/static/'
 
 # STATICFILES_DIRS = (
-    
+
 # )
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
