@@ -5,17 +5,18 @@ from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from .models import OTPModel
+from . import models
 
 
-@receiver(post_save, sender=OTPModel)
+
+@receiver(post_save, sender=models.OTPModel)
 def email_auth_otp_to_user(sender, instance, created, *args, **kwargs):
 
     if created:
     
         # send an e-mail to the user
 
-        user = instance.user
+        user: models.PasswordlessUserModel = instance.user
 
         context = {
             'username': user.username,

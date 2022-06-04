@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'rest_framework',
     'user',
+    'contract',
     'post_office'
 ]
 

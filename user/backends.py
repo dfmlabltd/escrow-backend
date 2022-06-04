@@ -23,7 +23,7 @@ class PasswordlessBackend(ModelBackend):
 
             user = UserModel._default_manager.get_by_natural_key(
                 email)
-
+            
         except UserModel.DoesNotExist:
 
             return
@@ -33,8 +33,10 @@ class PasswordlessBackend(ModelBackend):
             return
 
         try:
+                
 
             otp = OTPModel.objects.get(user=user, code=code)
+
 
             if otp.is_valid():
 
