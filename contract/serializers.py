@@ -23,7 +23,8 @@ class CreatableSlugRelatedField(serializers.SlugRelatedField):
 class EntitySerializer(serializers.ModelSerializer):
 
     user = CreatableSlugRelatedField(
-        slug_field='email'
+        slug_field = 'email',
+        queryset = models.UserModel.objects.all()
     )
 
 
