@@ -50,9 +50,9 @@ class OTPModel(models.Model):
     Model for the otp used in passwordless authentication
     """
 
-    code = models.CharField(max_length=128, default=compute_otp(), unique=True)
+    code = models.CharField(max_length=128, default=compute_otp, unique=True)
 
-    expiry_time = models.DateTimeField(default=compute_expiry_time())
+    expiry_time = models.DateTimeField(default=compute_expiry_time)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
