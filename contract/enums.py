@@ -10,7 +10,7 @@ class BlockchainNetwork(Enum):
     
     @classmethod
     def choices(cls):
-        return ((i.name, i.value["id"]) for i in cls)
+        return ((i.value["id"], i.name) for i in cls)
 
 
 class ContractStatus(Enum):
@@ -27,4 +27,4 @@ class ContractStatus(Enum):
     
     @classmethod
     def choices(cls):
-        return ((i.name, i.value) for i in cls)
+        return ((i.value, i.name) for i in cls)

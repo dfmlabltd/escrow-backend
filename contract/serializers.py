@@ -9,7 +9,8 @@ class CreatableSlugRelatedField(serializers.SlugRelatedField):
     def to_internal_value(self, data):
         queryset = self.get_queryset()
         try:
-            return queryset.get_or_create(**{self.slug_field: data})
+            obj, _ = queryset.get_or_create(**{self.slug_field: data})
+            return obj
         except ObjectDoesNotExist:
             self.fail('does_not_exist', slug_name=self.slug_field,
                       value=smart_str(data))
@@ -23,8 +24,8 @@ class CreatableSlugRelatedField(serializers.SlugRelatedField):
 class EntitySerializer(serializers.ModelSerializer):
 
     user = CreatableSlugRelatedField(
-        slug_field = 'email',
-        queryset = models.UserModel.objects.all()
+        slug_field='email',
+        queryset=models.UserModel.objects.all()
     )
 
 
@@ -34,7 +35,7 @@ class DepositorSerializer(EntitySerializer):
 
         model = models.DepositorModel
 
-        fields = '__all__'
+        exclude = ('contract',)
 
 
 class TrusteeSerializer(EntitySerializer):
@@ -43,7 +44,7 @@ class TrusteeSerializer(EntitySerializer):
 
         model = models.TrusteeModel
 
-        fields = '__all__'
+        exclude = ('contract',)
 
 
 class ContractSerializer(serializers.ModelSerializer):
@@ -51,6 +52,31 @@ class ContractSerializer(serializers.ModelSerializer):
     depositors = DepositorSerializer(many=True)
 
     trustees = TrusteeSerializer(many=True)
+
+    read_only_fields = ('contract_address', 'time_created',
+                        'time_update', 'status')
+
+    def create(self, validated_data):
+
+        depositors = validated_data.pop('depositors', [])
+
+        trustees = validated_data.pop("trustees", [])
+
+        contract = models.ContractModel.objects.create(**validated_data)
+
+        for depositor in depositors:
+
+            depositor['contract'] = contract
+
+            models.DepositorModel.objects.create(**depositor)
+
+        for trustee in trustees:
+
+            trustee['contract'] = contract
+
+            models.TrusteeModel.objects.create(**trustee)
+
+        return contract
 
     class Meta:
 

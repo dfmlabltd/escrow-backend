@@ -12,11 +12,11 @@ class ContractModel(models.Model):
     
     owner = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     
-    agreement = models.URLField()
+    agreement = models.URLField(blank=True)
     
     amount = models.IntegerField()
     
-    contract_address = models.CharField(max_length=64)
+    contract_address = models.CharField(max_length=64, blank=True, null=True)
     
     token_address = models.CharField(max_length=64)
     
@@ -35,11 +35,13 @@ class EntityModel(models.Model):
     
     amount = models.IntegerField()
     
-    wallet_address = models.IntegerField()
+    wallet_address = models.CharField(max_length=64)
     
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
         
     class Meta:
+        
+        unique_together = ('user', 'contract')
         
         abstract = True
         
