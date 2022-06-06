@@ -10,6 +10,8 @@ UserModel = get_user_model()
 
 class ContractModel(models.Model):
     
+    title = models.CharField(max_length=128)
+    
     owner = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     
     agreement = models.URLField(blank=True)
