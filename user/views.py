@@ -4,10 +4,10 @@ from . import models
 from . import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from rest_framework import status
 from . import throttles
-
-
 
 UserModel = get_user_model()
 
@@ -16,9 +16,7 @@ class LoginView(generics.CreateAPIView):
     """
     Endpoint for login
     """
-    
-    serializer_class = serializers.UserSerializer
-    
+        
     throttle_classes = (throttles.LoginRateThrottle,)
     
     permission_classes = ()
@@ -26,18 +24,28 @@ class LoginView(generics.CreateAPIView):
     authentication_classes =  ()
     
     def create(self, request, *args, **kwargs):
-                                    
-        serializer = self.get_serializer(data=request.data)
         
-        serializer.is_valid()
+        data = request.data
+                
+        email = data.get('email')
         
-        user, _ = UserModel.objects.get_or_create(email=request.data['email'])
+        try:
+
+            validate_email(email)
+            
+        except ValidationError:
+            
+            return Response({ 'email': 'enter a valid email address' }, status=status.HTTP_401_UNAUTHORIZED)
+        
+        user, _ = UserModel.objects.get_or_create(email=email)
         
         models.OTPModel.create_otp(user)
-                
-        headers = self.get_success_headers(serializer.data)
         
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED, headers=headers)
+        message = { 'email': email }
+                        
+        headers = self.get_success_headers(message)
+        
+        return Response(message, status=status.HTTP_202_ACCEPTED, headers=headers)
 
 
 class UsernameView(generics.UpdateAPIView):

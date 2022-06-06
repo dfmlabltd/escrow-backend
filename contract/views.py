@@ -1,20 +1,33 @@
 from rest_framework import viewsets, generics, mixins
-from django.db.models import Q
 from rest_framework.response import Response
+from rest_framework import filters
+from django.db.models import Q
+from . import pagination
 from . import models
 from . import serializers
 from rest_framework import status
-from escrow.permissions import IsActive
-from . import permissions
-
 
 class ContractView(viewsets.ViewSet, generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin):
 
-    queryset = models.ContractModel.objects.all()
-
     serializer_class = serializers.ContractSerializer
+    
+    pagination_class = pagination.ContractPagination
+    
+    filter_backends = [filters.SearchFilter]
+    
+    search_fields = ('$title', '$amount', '$contract_address')
+    
+    def get_queryset(self):
+        
+        current_user: models.UserModel = self.request.user
+        
+        contracts = models.ContractModel.objects.select_related().filter(
+            Q(owner=current_user) |
+            Q(depositors__user=current_user) |
+            Q(trustees__user=current_user)
+        )
 
-    permission_classes = (IsActive, permissions.ContractReadOnlyPermission, )
+        return contracts
 
     def create(self, request, *args, **kwargs):
 
@@ -33,3 +46,4 @@ class ContractView(viewsets.ViewSet, generics.GenericAPIView, mixins.RetrieveMod
         headers = self.get_success_headers(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
