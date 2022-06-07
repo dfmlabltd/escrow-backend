@@ -11,7 +11,7 @@ services:
       - "8000:8000"
     volumes:
       - ./:/usr/src/app
-    command: bash -c "python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate --no-input && gunicorn --workers=2 --bind=0.0.0.0:8000 escrow.wsgi:application"
+    command: bash -c "python manage.py makemigrations --no-input && python manage.py migrate --no-input && gunicorn --workers=2 --bind=0.0.0.0:8000 escrow.wsgi:application"
     depends_on:
       - database
       - redis
