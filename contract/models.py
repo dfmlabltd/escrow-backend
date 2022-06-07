@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django.db import models
 from . import enums
 from django.contrib.auth import get_user_model
@@ -7,8 +8,15 @@ UserModel = get_user_model()
 # Create your models here.
 
 
+def generate_UUID():
+    # TO DO
+    # fetch UUID from blockchain
+    
+    return uuid4
 
 class ContractModel(models.Model):
+    
+    id = models.UUIDField(primary_key=True, default=generate_UUID, editable=False)
     
     title = models.CharField(max_length=128)
     
