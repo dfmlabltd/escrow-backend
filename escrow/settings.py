@@ -34,7 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ['api.adehun.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -227,3 +227,16 @@ STATIC_URL = '/static/'
 # )
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://api.adehun.com",
+    "https://adehun.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:80",
+]
+
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
