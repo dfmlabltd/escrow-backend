@@ -12,9 +12,6 @@ services:
     volumes:
       - ./:/usr/src/app
     command: bash -c "python manage.py collectstatic --no-input && python manage.py makemigrations --no-input && python manage.py migrate --no-input && gunicorn --workers=2 --bind=0.0.0.0:8000 escrow.wsgi:application"
-    depends_on:
-      - database
-      - redis
   celery:
     container_name: celery
     restart: on-failure:5
@@ -60,21 +57,3 @@ services:
     entrypoint: bash -c "/etc/nginx/security/setup.sh"
     env_file:
       - ./escrow/.env
-  redis:
-    container_name: redis
-    hostname: redis
-    image: redis:latest
-    ports:
-      - 6379:6379
-    volumes:
-      - redis_volume:/data
-  database:
-    image: "postgres" # use latest official postgres version
-    container_name: database
-    env_file:
-      - ./escrow/.env
-    volumes:
-      - database_data:/var/lib/postgresql/data/
-volumes:
-  redis_volume:
-  database_data:
