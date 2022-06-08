@@ -46,6 +46,5 @@ services:
       - ./staticfiles:/staticfiles
     depends_on:
       - django
-      - ssl
     env_file:
       - ./escrow/.env
