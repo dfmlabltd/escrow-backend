@@ -49,15 +49,6 @@ services:
       - ./staticfiles:/staticfiles
     depends_on:
       - django
-      - ssl
-    env_file:
-      - ./escrow/.env
-  ssl:
-    build: ./config/nginx
-    container_name: ssl
-    volumes:
-      - ./config/nginx/security:/etc/nginx/security
-    entrypoint: bash -c "/etc/nginx/security/setup.sh"
     env_file:
       - ./escrow/.env
   redis:
