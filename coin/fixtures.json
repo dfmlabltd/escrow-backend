@@ -1,0 +1,37 @@
+[
+    {
+        "pk":1,
+        "model": "coin.BlockchainNetworkModel",
+        "fields": {
+            "pk":1,
+            "name":"CELO (Alfajores Testnet)",
+            "rpc":"https://alfajores-forno.celo-testnet.org",
+            "chain":44787,
+            "explorer":"https://alfajores-blockscout.celo-testnet.org"
+        }
+    },
+    {
+        "pk":1,
+        "model": "coin.TokenModel",
+        "fields": {
+            "pk": 1,
+            "name": "cUSD",
+            "contract":"0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
+            "symbol":"cUSD",
+            "decimal": 18,
+            "network": 1
+        }
+    },
+    {
+        "pk":2,
+        "model": "coin.TokenModel",
+        "fields": {
+            "pk": 1,
+            "name": "cEUR",
+            "contract":"0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f",
+            "symbol":"cEUR",
+            "decimal": 18,
+            "network": 1
+        }
+    }
+]
