@@ -12,6 +12,8 @@ class BlockchainNetworkModel(models.Model):
     
     explorer = models.URLField()
     
+    icon = models.URLField()
+    
 
 class TokenModel(models.Model):
     
@@ -24,3 +26,5 @@ class TokenModel(models.Model):
     decimal = models.IntegerField()
     
     network = models.ForeignKey(BlockchainNetworkModel, on_delete=models.CASCADE)
+    
+    icon = models.URLField()
