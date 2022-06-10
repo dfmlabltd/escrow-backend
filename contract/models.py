@@ -2,7 +2,7 @@ from uuid import uuid4
 from django.db import models
 from . import enums
 from django.contrib.auth import get_user_model
-
+from coin.models import TokenModel
 UserModel = get_user_model()
 
 # Create your models here.
@@ -28,10 +28,8 @@ class ContractModel(models.Model):
     
     contract_address = models.CharField(max_length=64, blank=True, null=True)
     
-    token_address = models.CharField(max_length=64)
-    
-    blockchain_network =  models.IntegerField(choices=enums.BlockchainNetwork.choices())
-    
+    token = models.ForeignKey(TokenModel, on_delete=models.CASCADE)
+        
     auto_withdraw = models.BooleanField(default=False)
     
     time_created = models.DateTimeField(auto_now_add=True)
