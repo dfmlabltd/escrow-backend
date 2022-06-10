@@ -5,6 +5,10 @@ from . import models
 
 
 class BlockchainNetworkView(generics.ListAPIView):
+    
+    permission_classes = ()
+    
+    authentication_classes =  ()
 
     serializer_class = serializers.BlockchainNetworkSerializer
 
@@ -12,6 +16,10 @@ class BlockchainNetworkView(generics.ListAPIView):
 
 
 class TokenView(generics.ListAPIView):
+    
+    permission_classes = ()
+    
+    authentication_classes =  ()
 
     serializer_class = serializers.TokenSerializer
 
