@@ -20,4 +20,5 @@ urlpatterns = [
     path('dashboard/', admin.site.urls),
     path('user/', include('user.urls')),
     path('contract/', include('contract.urls')),
+    path('crypto/', include('coin.urls')),
 ]
