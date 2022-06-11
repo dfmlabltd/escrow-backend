@@ -6,7 +6,8 @@
             "name":"CELO (Alfajores Testnet)",
             "rpc":"https://alfajores-forno.celo-testnet.org",
             "chain":44787,
-            "explorer":"https://alfajores-blockscout.celo-testnet.org"
+            "explorer":"https://alfajores-blockscout.celo-testnet.org",
+            "icon":"https://celo.org/images/marketplace-icons/icon-celo-CELO-color-f.svg"
         }
     },
     {
@@ -18,7 +19,7 @@
             "symbol":"cUSD",
             "decimal": 18,
             "network": 1,
-            "icon": "https://celo.org/images/marketplace-icons/icon-celo-dollar-color.svg"
+            "icon":"https://celo.org/images/marketplace-icons/icon-celo-dollar-color.svg"
         }
     },
     {
