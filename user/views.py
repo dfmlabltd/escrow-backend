@@ -48,10 +48,14 @@ class LoginView(generics.CreateAPIView):
         return Response(message, status=status.HTTP_202_ACCEPTED, headers=headers)
 
 
-class UsernameView(generics.UpdateAPIView):
+class ProfileView(generics.UpdateAPIView, generics.RetrieveAPIView):
     
     """
-    Endpoint for login
+    Endpoint for retrieving and updating
     """
     
-    serializer_class = serializers.UsernameSerializer
+    serializer_class = serializers.ProfileSerializer
+
+    def queryset(self):
+        
+        return self.request.user

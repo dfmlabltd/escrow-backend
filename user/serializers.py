@@ -12,13 +12,15 @@ class UserSerializer(serializers.ModelSerializer):
 
         fields = ('email', )
 
-class UsernameSerializer(serializers.ModelSerializer):
-
+class ProfileSerializer(serializers.ModelSerializer):
+    
     class Meta:
 
         model = UserModel
 
-        fields = ('username', )
+        fields = ('username', 'wallet', 'email', 'is_active')
+        
+        read_only_fields = ('email', 'is_active')
 
 
 class OTPSerializer(serializers.ModelSerializer):

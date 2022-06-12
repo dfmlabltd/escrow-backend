@@ -22,6 +22,8 @@ class PasswordlessUserModel(AbstractUser):
     username = UsernameField(max_length=16, validators=(validate_username,), null=True, blank=True)
     
     email = models.EmailField(unique=True, max_length=128)
+    
+    wallet = models.CharField(max_length=64, blank=True)
         
     USERNAME_FIELD = settings.USERNAME_FIELD
     
