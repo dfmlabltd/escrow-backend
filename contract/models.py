@@ -38,6 +38,7 @@ class ContractModel(models.Model):
     
     status = models.IntegerField(choices=enums.ContractStatus.choices(), default=enums.ContractStatus.PENDING.value)
 
+    dispute_wait_day = models.IntegerField(default=1)
 
 class EntityModel(models.Model):
     
