@@ -12,7 +12,7 @@ def generate_UUID():
     # TO DO
     # fetch UUID from blockchain
     
-    return uuid4
+    return uuid4()
 
 class ContractModel(models.Model):
     
@@ -26,7 +26,7 @@ class ContractModel(models.Model):
     
     amount = models.IntegerField()
     
-    contract_address = models.CharField(max_length=64, blank=True, null=True)
+    contract_address = models.CharField(max_length=64, blank=True, null=True, unique=True)
     
     token = models.ForeignKey(TokenModel, on_delete=models.CASCADE)
         
