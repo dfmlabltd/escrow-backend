@@ -1,21 +1,9 @@
 from enum import Enum
-from hashlib import new
 from pathlib import Path
 from typing import Dict
 from web3 import Web3
 import asyncio
 import json
-
-
-provider = Web3.WebsocketProvider("wss://alfajores-forno.celo-testnet.org/ws/")
-web3 = Web3(provider)
-
-with open('./abi.json', 'r') as abi:
-    contract_abi = json.loads(abi.read())
-
-
-# this contract has been deployed on the rinkeby net
-contract_address = '0x964bEd47B63A03c613019d7aFE935fFA80bde7F4'
 
 
 class EventType(Enum):
@@ -45,7 +33,7 @@ class BlockchainListener:
 
         self.provider = Web3.WebsocketProvider(rpc_url)
 
-        self.web3 = Web3(provider)
+        self.web3 = Web3(self.provider)
 
         self.contract = self.get_contract(
             contract_address, self.load_abi(abi_file_path))
@@ -60,7 +48,7 @@ class BlockchainListener:
 
     def get_contract(self, contract_address: str, contract_abi: str):
 
-        return web3.eth.contract(address=contract_address, abi=contract_abi)
+        return self.web3.eth.contract(address=contract_address, abi=contract_abi)
 
     # deposit event
     def handle_deposit_event(self, event):
@@ -68,14 +56,14 @@ class BlockchainListener:
         blockHash = event.get('blockHash').hex()
         args = event.get('args')
         print(transactionHash, args, blockHash)
-        
+
     # payment request event
     def handle_request_event(self, event):
         transactionHash = event.get('transactionHash').hex()
         blockHash = event.get('blockHash').hex()
         args = event.get('args')
         print(transactionHash, args, blockHash)
-        
+
     # payment request event
     def handle_request_rejected_event(self, event):
         transactionHash = event.get('transactionHash').hex()
@@ -89,13 +77,14 @@ class BlockchainListener:
         blockHash = event.get('blockHash').hex()
         args = event.get('args')
         print(transactionHash, args, blockHash)
-        
+
     # payment request event
     def handle_approval_event(self, event):
         transactionHash = event.get('transactionHash').hex()
         blockHash = event.get('blockHash').hex()
         args = event.get('args')
         print(transactionHash, args, blockHash)
+    
     # payment request event
     def handle_withdrawal_event(self, event):
         transactionHash = event.get('transactionHash').hex()
