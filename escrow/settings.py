@@ -54,7 +54,8 @@ INSTALLED_APPS += [
     'user',
     'coin',
     'contract',
-    'post_office'
+    'post_office',
+    'blockchain',
 ]
 
 MIDDLEWARE = [

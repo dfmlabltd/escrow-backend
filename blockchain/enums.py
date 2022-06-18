@@ -5,7 +5,7 @@ class TransactionStatus(Enum):
     
     PENDING = 0
     
-    ACCEPTED = 1
+    APPROVED = 1
     
     REJECTED = 2
     
@@ -25,3 +25,17 @@ class TransactionType(Enum):
     @classmethod
     def choices(cls):
         return ((i.value, i.name) for i in cls)
+    
+class EventType(Enum):
+
+    DEPOSIT = 0
+
+    REQUEST = 1
+
+    REJECTED = 2
+
+    VOTE = 3
+
+    APPROVED = 4
+
+    WITHDRAW = 5

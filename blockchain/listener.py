@@ -1,24 +1,10 @@
-from enum import Enum
 from pathlib import Path
 from typing import Dict
 from web3 import Web3
 import asyncio
 import json
-
-
-class EventType(Enum):
-
-    DEPOSIT = 0
-
-    REQUEST = 1
-
-    REJECTED = 2
-
-    VOTE = 3
-
-    APPROVED = 4
-
-    WITHDRAW = 5
+from .enums import EventType
+from . import tasks
 
 
 class BlockchainListener:
@@ -55,48 +41,68 @@ class BlockchainListener:
         transactionHash = event.get('transactionHash').hex()
         blockHash = event.get('blockHash').hex()
         args = event.get('args')
-        print(transactionHash, args, blockHash)
+        identifier = args.get('identifier')
+        contract_address = args.get('contract_address')
+        trustee = args.get('trustee')
+        amount = args.get('amount')
+        tasks.deposit.delay(identifier, contract_address, trustee, amount, transactionHash, blockHash)
 
-    # payment request event
-    def handle_request_event(self, event):
-        transactionHash = event.get('transactionHash').hex()
-        blockHash = event.get('blockHash').hex()
-        args = event.get('args')
-        print(transactionHash, args, blockHash)
-
-    # payment request event
-    def handle_request_rejected_event(self, event):
-        transactionHash = event.get('transactionHash').hex()
-        blockHash = event.get('blockHash').hex()
-        args = event.get('args')
-        print(transactionHash, args, blockHash)
-
-    # payment request event
-    def handle_vote_event(self, event):
-        transactionHash = event.get('transactionHash').hex()
-        blockHash = event.get('blockHash').hex()
-        args = event.get('args')
-        print(transactionHash, args, blockHash)
-
-    # payment request event
-    def handle_approval_event(self, event):
-        transactionHash = event.get('transactionHash').hex()
-        blockHash = event.get('blockHash').hex()
-        args = event.get('args')
-        print(transactionHash, args, blockHash)
-    
     # payment request event
     def handle_withdrawal_event(self, event):
         transactionHash = event.get('transactionHash').hex()
         blockHash = event.get('blockHash').hex()
         args = event.get('args')
-        print(transactionHash, args, blockHash)
+        identifier = args.get('identifier')
+        contract_address = args.get('contract_address')
+        amount = args.get('amount')
+        tasks.withdrawal.delay(
+            identifier, contract_address, transactionHash, blockHash)
+
+    # payment request event
+    def handle_reject_withdrawal_event(self, event):
+        args = event.get('args')
+        identifier = args.get('identifier')
+        contract_address = args.get('contract_address')
+        tasks.reject_withdrawal.delay(identifier, contract_address)
+        
+    # payment request event
+    def handle_withdrawal_approval_event(self, event):
+        args = event.get('args')
+        identifier = args.get('identifier')
+        contract_address = args.get('contract_address')
+        tasks.approve_withdrawal.delay(identifier, contract_address)
+
+    # payment request event
+    def handle_request_for_withdrawal_event(self, event):
+        args = event.get('args')
+        identifier = args.get('identifier')
+        contract_address = args.get('contract_address')
+        amount = args.get('amount')
+        description = args.get('description')
+        trustee = args.get('trustee')
+        tasks.request_for_withdrawal.delay(identifier, contract_address, trustee, amount, description)
 
     def event_reducer(self, event, event_type):
 
         if event_type == EventType.DEPOSIT:
 
             self.handle_deposit_event(event)
+            
+        elif event_type == EventType.REQUEST:
+            
+            self.handle_reject_withdrawal_event(event)
+            
+        elif event_type == EventType.REJECTED:
+            
+            self.handle_reject_withdrawal_event(event)
+            
+        elif event_type == EventType.WITHDRAW:
+            
+            self.handle_withdrawal_event(event)
+
+        elif event_type == EventType.APPROVED:
+            
+            self.handle_withdrawal_approval_event(event)
 
     async def loop_event(self, event_filter, poll_interval, event_type: EventType):
         while True:
@@ -115,6 +121,9 @@ class BlockchainListener:
 
         deposit_event = events.OwnerSet.createFilter(fromBlock='latest')
         request_event = events.OwnerX.createFilter(fromBlock='latest')
+        reject_event = events.OwnerX.createFilter(fromBlock='latest')
+        withdraw_event = events.OwnerX.createFilter(fromBlock='latest')
+        approve_event = events.OwnerX.createFilter(fromBlock='latest')
 
         loop = asyncio.get_event_loop()
 
@@ -123,15 +132,9 @@ class BlockchainListener:
                 asyncio.gather(
                     self.loop_event(deposit_event, 2, EventType.DEPOSIT),
                     self.loop_event(request_event, 2, EventType.REQUEST),
+                    self.loop_event(reject_event, 2, EventType.REJECTED),
+                    self.loop_event(withdraw_event, 2, EventType.WITHDRAW),
+                    self.loop_event(approve_event, 2, EventType.APPROVED),
                 ))
         finally:
             loop.close()
-
-
-listener = BlockchainListener("wss://alfajores-forno.celo-testnet.org/ws/",
-                              "0x964bEd47B63A03c613019d7aFE935fFA80bde7F4",
-                              Path("./abi.json")
-                              )
-
-
-listener.loop()

@@ -1,4 +1,3 @@
-import enum
 from django.db import models
 from contract.models import ContractModel
 from . import enums
