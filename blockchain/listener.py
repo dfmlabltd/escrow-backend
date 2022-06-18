@@ -45,7 +45,8 @@ class BlockchainListener:
         contract_address = args.get('contract_address')
         trustee = args.get('trustee')
         amount = args.get('amount')
-        tasks.deposit.delay(identifier, contract_address, trustee, amount, transactionHash, blockHash)
+        tasks.deposit.delay(identifier, contract_address,
+                            trustee, amount, transactionHash, blockHash)
 
     # payment request event
     def handle_withdrawal_event(self, event):
@@ -54,7 +55,6 @@ class BlockchainListener:
         args = event.get('args')
         identifier = args.get('identifier')
         contract_address = args.get('contract_address')
-        amount = args.get('amount')
         tasks.withdrawal.delay(
             identifier, contract_address, transactionHash, blockHash)
 
@@ -64,7 +64,7 @@ class BlockchainListener:
         identifier = args.get('identifier')
         contract_address = args.get('contract_address')
         tasks.reject_withdrawal.delay(identifier, contract_address)
-        
+
     # payment request event
     def handle_withdrawal_approval_event(self, event):
         args = event.get('args')
@@ -80,28 +80,29 @@ class BlockchainListener:
         amount = args.get('amount')
         description = args.get('description')
         trustee = args.get('trustee')
-        tasks.request_for_withdrawal.delay(identifier, contract_address, trustee, amount, description)
+        tasks.request_for_withdrawal.delay(
+            identifier, contract_address, trustee, amount, description)
 
     def event_reducer(self, event, event_type):
 
         if event_type == EventType.DEPOSIT:
 
             self.handle_deposit_event(event)
-            
+
         elif event_type == EventType.REQUEST:
-            
+
             self.handle_reject_withdrawal_event(event)
-            
+
         elif event_type == EventType.REJECTED:
-            
+
             self.handle_reject_withdrawal_event(event)
-            
+
         elif event_type == EventType.WITHDRAW:
-            
+
             self.handle_withdrawal_event(event)
 
         elif event_type == EventType.APPROVED:
-            
+
             self.handle_withdrawal_approval_event(event)
 
     async def loop_event(self, event_filter, poll_interval, event_type: EventType):
@@ -119,11 +120,11 @@ class BlockchainListener:
 
         events = self.events
 
-        deposit_event = events.OwnerSet.createFilter(fromBlock='latest')
-        request_event = events.OwnerX.createFilter(fromBlock='latest')
-        reject_event = events.OwnerX.createFilter(fromBlock='latest')
-        withdraw_event = events.OwnerX.createFilter(fromBlock='latest')
-        approve_event = events.OwnerX.createFilter(fromBlock='latest')
+        deposit_event = events.Deposit.createFilter(fromBlock='latest')
+        request_event = events.Request.createFilter(fromBlock='latest')
+        reject_event = events.Rejected.createFilter(fromBlock='latest')
+        withdraw_event = events.Withdrawal.createFilter(fromBlock='latest')
+        approve_event = events.Approved.createFilter(fromBlock='latest')
 
         loop = asyncio.get_event_loop()
 
