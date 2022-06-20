@@ -247,7 +247,6 @@ CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
 CORS_ALLOW_HEADERS = [
     "accept",
-    "authentication",
     "accept-encoding",
     "authorization",
     "content-type",
