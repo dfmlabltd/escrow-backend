@@ -27,9 +27,9 @@ def email_payment_request_to_depositor(sender, instance, created, *args, **kwarg
 
         # render email text
         email_html_message = render_to_string(
-            'contract/sample.html', context)
+            'contract/base.html', context)
         email_plaintext_message = render_to_string(
-            'contract/sample.txt', context)
+            'contract/base.txt', context)
 
         msg = EmailMultiAlternatives(
             # title:
@@ -64,9 +64,9 @@ def email_payment_request_to_trustee(sender, instance, created, *args, **kwargs)
 
         # render email text
         email_html_message = render_to_string(
-            'contract/sample.html', context)
+            'contract/base.html', context)
         email_plaintext_message = render_to_string(
-            'contract/sample.txt', context)
+            'contract/base.txt', context)
 
         msg = EmailMultiAlternatives(
             # title:
