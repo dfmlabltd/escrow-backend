@@ -53,6 +53,9 @@ def email_payment_request_to_depositor(sender, instance, created, *args, **kwarg
         
 @receiver(post_save, sender=models.TrusteeModel)
 def email_payment_request_to_trustee(sender, instance, created, *args, **kwargs):
+    
+    logger.error("user.email")
+    logger.error(created)
 
     if created:
     
