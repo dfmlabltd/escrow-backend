@@ -3,7 +3,6 @@ from . import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
 from typing import List, Dict
-from django.utils.translation import ugettext_lazy as _
 
 
 class CreatableSlugRelatedField(serializers.SlugRelatedField):
@@ -105,7 +104,7 @@ class ContractSerializer(serializers.ModelSerializer):
                 total_deposit_amount == contract.amount):
 
             raise serializers.ValidationError(
-                {_("detail"): _('total amount not equal')})
+                {"detail": 'total amount not equal'})
 
         contract.save()
 
