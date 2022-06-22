@@ -6,10 +6,16 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from . import models
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=models.DepositorModel)
 def email_payment_request_to_depositor(sender, instance, created, *args, **kwargs):
+    
+    logger.error("user.email")
+    logger.error(created)
 
     if created:
     
