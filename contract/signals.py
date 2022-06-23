@@ -9,10 +9,11 @@ from . import models
 import logging
 
 logger = logging.getLogger('django')
-logger.error("user.email")
 
 @receiver(post_save, sender=models.DepositorModel)
 def email_payment_request_to_depositor(sender, instance, created, *args, **kwargs):
+    
+    logger.error("user.email")
     
     logger.error(created)
 
