@@ -36,7 +36,7 @@ def email_payment_request_to_depositor(sender, instance: models.DepositorModel, 
             'contract_id': contract.id,
             'contract_owner_email' : contract_owner_email,
             'token_symbol': token.symbol,
-            'token_network': token.network,
+            'token_network_name': token.network.name,
         }
 
         # render email text
