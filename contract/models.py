@@ -49,7 +49,7 @@ class EntityModel(models.Model):
     
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     
-    objects = managers.EntityManager
+    objects = managers.EntityManager()
         
     class Meta:
         
