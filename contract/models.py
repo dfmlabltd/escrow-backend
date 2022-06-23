@@ -1,6 +1,7 @@
 from uuid import uuid4
 from django.db import models
 from . import enums
+from . import managers
 from django.contrib.auth import get_user_model
 from coin.models import TokenModel
 UserModel = get_user_model()
@@ -47,6 +48,8 @@ class EntityModel(models.Model):
     wallet_address = models.CharField(max_length=64)
     
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    
+    objects = managers.EntityManager
         
     class Meta:
         
