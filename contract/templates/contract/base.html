@@ -185,7 +185,7 @@
                                     <div class="shape">
                                       <div>
                                         <div style="font-size: 16px">
-                                          <b>Quick Tip</b>
+                                          <b>Hello {{ email }}</b>
                                         </div>
                                         <div style="font-size: 13px">
                                           {{ title }}
@@ -345,7 +345,9 @@
                                         border-radius: 5px;
                                         width: auto;
                                       "
-                                      ><a
+                                    >
+                                      {% block action_button %}
+                                      <a
                                         href=" {% block continueLink %}#{% endblock continueLink %}"
                                         class="es-button es-button-1"
                                         target="_blank"
@@ -372,8 +374,8 @@
                                           text-align: center;
                                         "
                                         >CONTINUE</a
-                                      ></span
-                                    >
+                                      >{% endblock action_button %}
+                                    </span>
                                   </td>
                                 </tr>
                               </table>

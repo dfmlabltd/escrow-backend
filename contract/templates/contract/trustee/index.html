@@ -1,0 +1,5 @@
+{% extends './../base.html' %}
+
+{% block message %}
+You are receiving this email because {{ contract_owner_email }} has added you as a trustee to their escrow contract titled "{{ title }}". You can withdraw upto {{ amount }}{{ token_symbol }} on the {{ token_network }} using your wallet address {{ wallet_address }}. If you think this is an error, kindly inform our customer support.
+{% endblock message %}

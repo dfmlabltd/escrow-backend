@@ -12,36 +12,42 @@ logger = logging.getLogger('django')
 
 
 @receiver(post_save, sender=models.DepositorModel)
-def email_payment_request_to_depositor(sender, instance, created, *args, **kwargs):
-    
-        
-    logger.error("user.email")
-    logger.error(created)
-
+def email_payment_request_to_depositor(sender, instance: models.DepositorModel, created, *args, **kwargs):
 
     if created:
     
         # send an e-mail to the user
 
         user: models.UserModel = instance.user
-
+        
+        contract : models.ContractModel = instance.contract
+        
+        token : models.TokenModel = contract.token
+        
+        email = user.email
+        
+        contract_owner_email = contract.owner.email
+        
         context = {
-            'username': user.username,
-            'email': user.email,
+            'title': contract.title,
+            'email': email,
             'amount': instance.amount,
             'wallet_address' : instance.wallet_address,
-            'contract_id': instance.contract.id,
+            'contract_id': contract.id,
+            'contract_owner_email' : contract_owner_email,
+            'token_symbol': token.symbol,
+            'token_network': token.network,
         }
 
         # render email text
         email_html_message = render_to_string(
-            'contract/base.html', context)
+            'contract/depositor/index.html', context)
         email_plaintext_message = render_to_string(
-            'contract/base.txt', context)
+            'contract/depositor/index.txt', context)
 
         msg = EmailMultiAlternatives(
             # title:
-            f"Someone added you as a Depositor",
+            f"{email} added you to contract #{contract.id}",
             # message:
             email_plaintext_message,
             # from:
@@ -56,32 +62,40 @@ def email_payment_request_to_depositor(sender, instance, created, *args, **kwarg
 @receiver(post_save, sender=models.TrusteeModel)
 def email_payment_request_to_trustee(sender, instance, created, *args, **kwargs):
     
-    logger.error("user.email")
-    logger.error(created)
-
     if created:
-    
+        
         # send an e-mail to the user
 
         user: models.UserModel = instance.user
-
+        
+        contract : models.ContractModel = instance.contract
+        
+        token : models.TokenModel = contract.token
+        
+        email = user.email
+        
+        contract_owner_email = contract.owner.email
+        
         context = {
-            'username': user.username,
-            'email': user.email,
+            'title': contract.title,
+            'email': email,
             'amount': instance.amount,
             'wallet_address' : instance.wallet_address,
-            'contract_id': instance.contract.id,
+            'contract_id': contract.id,
+            'contract_owner_email' : contract_owner_email,
+            'token_symbol': token.symbol,
+            'token_network': token.network,
         }
 
         # render email text
         email_html_message = render_to_string(
-            'contract/base.html', context)
+            'contract/trustee/index.html', context)
         email_plaintext_message = render_to_string(
-            'contract/base.txt', context)
+            'contract/trustee/index.txt', context)
 
         msg = EmailMultiAlternatives(
             # title:
-            f"Someone Added you as a Trustee",
+            f"{email} added you to contract #{contract.id}",
             # message:
             email_plaintext_message,
             # from:
