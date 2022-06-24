@@ -1,6 +1,72 @@
 {% extends './../base.html' %} 
 {% block message %} 
-Copy the code below <b>{{ code }}</b> You are receiving this email because your email 
-{{ email }} was used to access our website. If you think this is an error, kindly
-ignore and delete this email. 
-{% endblock message %}
+Your email address {{ email }} was recently used to request access to adehun.com. If this is you,
+<b>copy</b> the code below and paste it on our website to authenticate yourself,
+else, kindly ignore and delete immediately. 
+{% endblock message %} 
+{% block action_button %}
+<input
+  id="code"
+  style="
+    padding: 6px;
+    mso-style-priority: 100 !important;
+    text-decoration: none;
+    -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    mso-line-height-rule: exactly;
+    font-size: 14px;
+    border-style: solid;
+    display: inline-block;
+    border-radius: 3px;
+    font-family: arial, helvetica, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 17px;
+    width: auto;
+    text-align: center;
+  "
+  value="{{ code }}"
+/>
+
+<span
+  class="es-button-border"
+  style="
+    border-style: solid;
+    border-color: #301b71;
+    background: #301b71;
+    border-width: 0px;
+    display: inline-block;
+    border-radius: 3px;
+    width: auto;
+  "
+  ><button
+    onclick="copy(this)"
+    class="es-button es-button-1"
+    target="_blank"
+    class="copied"
+    style="
+      mso-style-priority: 100 !important;
+      text-decoration: none;
+      -webkit-text-size-adjust: none;
+      -ms-text-size-adjust: none;
+      mso-line-height-rule: exactly;
+      color: #ffffff;
+      font-size: 14px;
+      border-style: solid;
+      border-color: #301b71;
+      border-width: 8px 25px;
+      display: inline-block;
+      background: #301b71;
+      border-radius: 3px;
+      font-family: arial, helvetica, sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      line-height: 17px;
+      width: auto;
+      text-align: center;
+    "
+  >
+    Copy Login ID
+  </button></span
+>
+{% endblock action_button %}

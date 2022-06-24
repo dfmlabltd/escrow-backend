@@ -1,7 +1,7 @@
-Hello {{ username }},
+Hello,
 
-Copy the code below
+Your email address {{ email }} was recently used to request access to adehun.com. 
+If this is you, copy the code below and paste it on our website to authenticate yourself,
+else, kindly ignore and delete immediately.
 
 {{ code }}
-
-You are receiving this email because your email {{ email }} was used to access our website. If you think this is an error, kindly ignore and delete this email.
