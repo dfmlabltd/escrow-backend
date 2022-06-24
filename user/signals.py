@@ -26,9 +26,9 @@ def email_auth_otp_to_user(sender, instance, created, *args, **kwargs):
 
         # render email text
         email_html_message = render_to_string(
-            'user/sample.html', context)
+            'user/login/index.html', context)
         email_plaintext_message = render_to_string(
-            'user/sample.txt', context)
+            'user/login/index.txt', context)
 
         msg = EmailMultiAlternatives(
             # title:
