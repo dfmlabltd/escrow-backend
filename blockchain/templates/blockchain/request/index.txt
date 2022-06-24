@@ -1,0 +1,3 @@
+A withdrawal request of {{ amount }}{{ token_symbol }} was made by {{ creator }} on contract #{{ contract_id }} you were added to. 
+Description:</b> {{ description }} 
+Transaction Hash:</b> {{ transaction_hash }}

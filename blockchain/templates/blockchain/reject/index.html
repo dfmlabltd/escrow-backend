@@ -1,0 +1,6 @@
+{% extends './../base.html' %}
+{% block message %} A request to withdraw
+<b>{{ amount }}{{ token_symbol }}</b> by <b>{{ creator }}</b> was rejected by a
+depositor on the contract #{{ contract_id }} you were added to. <br /><br />
+ <br /><br /><b>Transaction Hash:</b> {{ transaction_hash }} 
+{% endblock message %}

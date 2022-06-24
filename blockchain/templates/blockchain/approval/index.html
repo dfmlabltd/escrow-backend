@@ -1,0 +1,7 @@
+{% extends './../base.html' %}
+{% block message %} An approval to withdraw <b>{{ amount }}{{ token_symbol }}</b> was made
+on contract #{{ contract_id }} you were added to.
+<br /><br />
+<b>Description:</b>{{ description }} <br /><br />
+<b>Transaction Hash:</b> {{ transaction_hash }} 
+{% endblock message %}

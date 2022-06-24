@@ -52,22 +52,23 @@ def emailer(instance: models.TransactionModel, template: str, title: str):
     context = {
         'transaction_hash': instance.transaction_hash,
         'identifier': instance.identifier,
-        'contract': contract.id,
+        'contract_id': contract.id,
         'amount': instance.amount,
         'block_hash': instance.transaction_hash,
         'creator': instance.creator,
         'description': instance.description,
         'type': instance.type,
-        'status': instance.status
+        'status': instance.status,
+        'token_symbol': contract.token.symbol,
     }
 
     emails = get_all_related_email()
 
     # render email text
     email_html_message = render_to_string(
-        f'blockchain/deposit/{template}.html', context)
+        f'blockchain/{template}/index.html', context)
     email_plaintext_message = render_to_string(
-        f'blockchain/deposit/{template}.txt', context)
+        f'blockchain/{template}/index.txt', context)
 
     msg = EmailMultiAlternatives(
         # title:
@@ -90,10 +91,17 @@ def email_on_new_transaction(sender, instance: models.TransactionModel, created,
 
     # send an e-mail to the user on deposit/request for withdrawal
 
-    if created:
+    if created and instance.transaction_hash:
 
-        emailer(instance, 'new_transaction',
+        emailer(instance, 'deposit',
                 f"A new transaction occurred in your contract #{instance.contract.id}")
+        
+    elif created:
+
+        emailer(instance, 'request',
+                f"A new transaction occurred in your contract #{instance.contract.id}")
+        
+    
 
 
 @receiver(custom_signals.reject_withdrawal, sender=models.TrusteeModel)

@@ -1,0 +1,1 @@
+A request to withdraw {{ amount }}{{ token_symbol }} by {{ creator }} was rejected by a depositor on the contract #{{ contract_id }} you were added to.

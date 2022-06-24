@@ -1,0 +1,3 @@
+A deposit of {{ amount }}{{ token_symbol }} was made by {{ creator }} to contract #{{ contract_id }} you were added to. 
+Description:{{ description }}
+nsaction Hash: {{ transaction_hash }}
