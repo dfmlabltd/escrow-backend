@@ -8,20 +8,19 @@ else, kindly ignore and delete immediately.
 <input
   id="code"
   style="
-    padding: 6px;
+    padding: 9px;
     mso-style-priority: 100 !important;
     text-decoration: none;
     -webkit-text-size-adjust: none;
     -ms-text-size-adjust: none;
     mso-line-height-rule: exactly;
-    font-size: 14px;
+    font-size: 16px;
     border-style: solid;
     display: inline-block;
     border-radius: 3px;
     font-family: arial, helvetica, sans-serif;
     font-weight: normal;
     font-style: normal;
-    line-height: 17px;
     width: auto;
     text-align: center;
   "
@@ -69,4 +68,26 @@ else, kindly ignore and delete immediately.
     Copy Login ID
   </button></span
 >
+<script>
+    function copy(e) {
+      /* Get the text field */
+      var copyText = document.getElementById("code");
+
+      /* Select the text field */
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+      /* Copy the text inside the text field */
+      navigator.clipboard.writeText(copyText.value);
+
+      const oldText = e.innerText
+
+      e.innerText = 'copied'
+
+      setTimeout(() => {
+        e.innerText = oldText;
+      }, 600);
+
+    }
+  </script>
 {% endblock action_button %}
